@@ -106,6 +106,10 @@ def versionChecker():
             )
         time.sleep(60*10)
 
+def get_thumbnail(item_id) -> str:
+    res = requests.get(f'https://thumbnails.roblox.com/v1/assets?assetIds={item_id}&size=420x420&format=Png').json()
+    return res['data'][0]['imageUrl']
+
 def checkValue():
     while True:
         response = requests.get("https://pastebin.com/raw/WrNwJJnv")
@@ -1361,6 +1365,7 @@ async def viewWatching(ctx):
                          color=discord.Color.from_rgb(255, 182, 193),
                          description=f"Description: {item_data['description']} \nUnits Left: `{str(item_data['unitsAvailableForConsumption'])}/{str(item_data['totalQuantity'])}` \nPrice: `{str(item_data['price'])}` \nCreator: `{item_data['creatorName']}` \nID: {str(item_data['id'])}"
                     )
+                    embedToAdd.set_thumbnail(url=get_thumbnail(str(item_data['id'])))
                     listOfEmbeds.append(embedToAdd)
                elif testIfVariableExists(item_data, "price"):
                    embedToAdd =  discord.Embed(
@@ -1369,6 +1374,7 @@ async def viewWatching(ctx):
                          color=discord.Color.from_rgb(255, 182, 193),
                          description=f"Description: {item_data['description']} \nUnits Left: `Item detected not a limited.` \nPrice: `{str(item_data['price'])}` \nCreator: `{item_data['creatorName']}` \nID: {str(item_data['id'])}"
                     )
+                   embedToAdd.set_thumbnail(url=get_thumbnail(str(item_data['id'])))
                    listOfEmbeds.append(embedToAdd)
                else:
                    embedToAdd =  discord.Embed(
@@ -1377,6 +1383,7 @@ async def viewWatching(ctx):
                          color=discord.Color.from_rgb(255, 182, 193),
                          description=f"Description: {item_data['description']} \nPrice: `Not for sale` \nCreator: `{item_data['creatorName']}` \nID: {str(item_data['id'])}"
                     )
+                   embedToAdd.set_thumbnail(url=get_thumbnail(str(item_data['id'])))
                    listOfEmbeds.append(embedToAdd)
             if listOfEmbeds == []:
                 listOfEmbeds.append(discord.Embed(
