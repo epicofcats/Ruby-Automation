@@ -4,7 +4,7 @@ try:
     import discord
     from discord.ext import commands
     import json 
-    import aiohttp eeeee
+    import aiohttp 
     from discord import Embed, Colour
     from discord import Game
     from robloxapi import Client
@@ -639,7 +639,7 @@ async def info(ctx):
         inline=False,
     )
     embed.add_field(name=f"Utilitys", value=f"```{prefix}more  --Look at some general information\n{prefix}ping  --Check the bot response time```", inline=False)   
-    embed.set_footer(text="revamped by dys#9997")
+    embed.set_footer(text="revamped by dys#9997 and hardish")
     await ctx.send(embed=embed)
 
 #remove all command
@@ -786,7 +786,7 @@ async def more(ctx):
     embed.add_field(name="Scan speed:", value=scan_speed, inline=False)
     embed.add_field(name="Watching:", value=watching if watching else "No items", inline=False)
     embed.add_field(name="Runtime:", value=runtime, inline=False)
-    embed.set_footer(text="hi 👋 (revamped by dys#9997)")
+    embed.set_footer(text="hi 👋 (revamped by dys#9997 and hardish)")
     await ctx.send(embed=embed)
 
 #cookie command
