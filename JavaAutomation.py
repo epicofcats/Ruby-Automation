@@ -1,4 +1,4 @@
-#Join .gg/javaw  
+#Join .gg/ugcleaks  
 import pip 
 try:
     import discord
