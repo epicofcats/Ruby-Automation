@@ -3,7 +3,7 @@ import pip
 try:
     import discord
     from discord.ext import commands
-    import json e
+    import json 
     import aiohttp 
     from discord import Embed, Colour
     from discord import Game
@@ -392,7 +392,8 @@ async def get_user_id_from_cookie(cookie):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CheckFailure):
         embed = Embed(title="Error", description=" ```Only the owner can use such commands. ```", color=Colour.red())
-        await ctx.send(embed=embed)
+        return
+        # await ctx.send(embed=embed)
 
 @bot.event
 async def on_ready():
@@ -449,6 +450,39 @@ async def prefix(ctx, new_prefix: str):
         color=discord.Color.from_rgb(255, 182, 193)
     )
     await ctx.send(embed=embed)
+
+#screenshot
+@bot.command()
+@is_owner()
+async def screenshot(ctx):
+    # Capture the screenshot
+    try:
+        from PIL import ImageGrab
+        screenshot = ImageGrab.grab()
+    except ImportError:
+        await ctx.send("Failed to capture screenshot. Please make sure you have the Pillow library installed.")
+        return
+
+    # Convert the image to bytes
+    image_bytes = BytesIO()
+    screenshot.save(image_bytes, format='PNG')
+    image_bytes.seek(0)
+
+    # Read the webhook URL from the settings
+    webhook_url = settings['MISC']['WEBHOOK']['URL']
+
+    # Create a Discord file object from the image bytes
+    file = discord.File(image_bytes, filename='screenshot.png')
+
+    # Send the screenshot as an embed to the webhook
+    embed = discord.Embed()
+    embed.set_image(url='attachment://screenshot.png')
+
+    async with ctx.typing():
+        try:
+            await ctx.send(file=file, embed=embed)
+        except discord.HTTPException:
+            await ctx.send("Failed to send the screenshot to the webhook.")
 
 #webhook command
 @bot.command() 
@@ -518,10 +552,10 @@ async def onlyfree(ctx, status: str):
     
     if status.lower() == 'on':
         settings['MISC']['WATCHER']['ONLY_FREE'] = True
-        description = '```Mewt sniper will now only snipe free items. Run !onlyfree off to deactivate this setting.```'
+        description = 'Mewt sniper will now only snipe free items. Run !onlyfree off to deactivate this setting.'
     else:
         settings['MISC']['WATCHER']['ONLY_FREE'] = False
-        description = '```Mewt sniper will now snipe paid items too. Run !onlyfree on to activate this setting.```'
+        description = 'Mewt sniper will now snipe paid items too. Run !onlyfree on to activate this setting.'
 
     
     with open('settings.json', 'w') as f:
@@ -571,6 +605,35 @@ async def speed(ctx, new_speed: str):
             print("Succesfully restarted mewt after updating the speed")
     else:
             print("Error while trying to restart mewt after updating the speed.")
+
+# fast snipe command
+@bot.command(name="fast_snipe")
+@is_owner()
+async def fast_snipe(ctx):
+
+    with open("settings.json", "r") as f:
+        settings = json.load(f)
+
+
+    settings["MISC"]["BUY_DEBOUNCE"] = 0.2
+    settings['MISC']['WATCHER']['SCAN_SPEED'] = 0.2
+
+    with open("settings.json", "w") as f:
+        json.dump(settings, f, indent=4)
+
+    embed = Embed(
+        title="Success!",
+        description=f"```New buy debounce: 0.2\nNew speed: 0.2```",
+        color=Colour.from_rgb(255, 182, 193),
+    )
+    await ctx.send(embed=embed)
+
+    if await restart_main_py():
+        print("Succesfully restarted mewt after updating the buy debounce & speed.")
+    else:
+        print("Error while trying to restart mewt after updating the buy debounce & speed.")
+
+
 # buy debounce command
 @bot.command(name="buy_debounce")
 @is_owner()
@@ -625,7 +688,7 @@ async def info(ctx):
     embed.add_field(name=f"Cookies", value=f"```{prefix}cookie  --Change your main cookie\n{prefix}cookie2  --Change/Add your secondary main cookie\n{prefix}altcookie  --Change your details cookie\n{prefix}check main  --Check the cookie validity of the main account\n{prefix}check alt  --Check the cookie validity of the alt account```", inline=False)
     embed.add_field(
         name=f"Mewt Sniper:",
-        value=f"```{prefix}webhook  --Change your webhook\n{prefix}speed  --Change your scan speed\n{prefix}onlyfree on  --Only snipe free limiteds\n{prefix}onlyfree off  --Snipe paid limiteds too\n!add  --Add an item ID to the searcher\n!remove --Remove an item from the searcher\n!watching --Shows the list of items you are watching\n!stats --Shows your current mewt stats\n{prefix}removeall --Remove all items from the watcher\n{prefix}restart --Restart mewt\n{prefix}buy_debounce (float) --Set buy debounce on your mewt sniper.\n{prefix}autorestart (minutes) --Autorestart mewt every tot. minutes\n{prefix}autorestart off --Disable autorestarter\n{prefix}autorestart --View the autorestart status ```",
+        value=f"```{prefix}add_link  --Add an item ID from its link [ID MUST BE 11 DIGITS AND LINK BEGINS WITH https://]\n{prefix}webhook  --Change your webhook\n{prefix}speed  --Change your scan speed\n{prefix}onlyfree on  --Only snipe free limiteds\n{prefix}onlyfree off  --Snipe paid limiteds too\n!add  --Add an item ID to the searcher\n!remove --Remove an item from the searcher\n!watching --Shows the list of items you are watching\n!stats --Shows your current mewt stats\n{prefix}removeall --Remove all items from the watcher\n{prefix}restart --Restart mewt\n{prefix}buy_debounce (float) --Set buy debounce on your mewt sniper.\n{prefix}autorestart (minutes) --Autorestart mewt every tot. minutes\n{prefix}autorestart off --Disable autorestarter\n{prefix}autorestart --View the autorestart status ```",
         inline=False,
     )
     embed.add_field(
@@ -635,12 +698,12 @@ async def info(ctx):
     )
     embed.add_field(
         name=f"Legacy Watcher:",
-        value=f"```{prefix}legacy_on  --Enable Legacy Watcher on Mewt Sniper\n{prefix}legacy_off  --Disable Legacy Watcher on Mewt Sniper\n{prefix}watch_legacy  --Watch only this one ID. IDS CANNOT BE REVERTED AFTER COMMAND RAN  ```",
+        value=f"```{prefix}legacy_on  --Enable Legacy Watcher on Mewt Sniper\n{prefix}legacy_off  --Disable Legacy Watcher on Mewt Sniper\n{prefix}watch_legacy  --Watch only this one ID. IDS CANNOT BE REVERTED AFTER COMMAND RAN\n{prefix}link_legacy  --Watch only this one ID from a link. [ID MUST BE 11 DIGITS AND LINK BEGINS WITH https://, IDS CANNOT BE REVERTED AFTER COMMAND RAN]  ```",
         inline=False,
     )
     embed.add_field(name=f"Utilitys", value=f"```{prefix}more  --Look at some general information\n{prefix}ping  --Check the bot response time```", inline=False)   
     embed.set_footer(text="revamped by dys#9997 and hardish")
-    await ctx.send(embed=embed)
+    await ctx.author.send(embed=embed)
 
 #remove all command
 @bot.command()
@@ -1237,6 +1300,87 @@ async def watch_legacy(ctx, id: int):
     )
 
     await ctx.send(embed=embed)
+
+# legacy watcher watch (but with link :O)
+@bot.command()
+@is_owner()
+async def link_legacy(ctx, link: str):
+    if link[0:8] != "https://":
+        embed = discord.Embed(
+        title="Error",
+        description=f"```Link does not begin with https:// ```",
+        color=discord.Color.from_rgb(255, 182, 193),
+        )
+    elif link[31:42].isdigit() == False:
+        embed = discord.Embed(
+        title="Error",
+        description=f"```Item ID is not 11 digits! Add the ID instead through !add or !watch_legacy```",
+        color=discord.Color.from_rgb(255, 182, 193),
+        )     
+    if link[0:8] == "https://" and link[31:42].isdigit() == True:
+
+        print("Adding legacy id")
+
+        with open("settings.json", "r") as f:
+            settings = json.load(f)
+        
+        settings["MISC"]["WATCHER"]["ITEMS"] = [int(link[31:42])]
+        settings["MISC"]["WATCHER"]["USE_LEGACY_WATCHER"] = True
+
+        with open("settings.json", "w") as f:
+            json.dump(settings, f, indent=4)
+
+        restart_main_py()   
+        embed = discord.Embed(
+        title="LEGACY_WATCHER Update",
+        description=f"```All items that were previously added on the JSON were removed and replaced with ID {link[31:42]}. If legacy watcher was off, it has been enabled automatically.```",
+        color=discord.Color.from_rgb(255, 182, 193),
+        )   
+
+    await ctx.send(embed=embed)
+
+#add link
+@bot.command()
+@is_owner()
+async def add_link(ctx, link: str):
+    if link[0:8] != "https://":
+        embed = discord.Embed(
+        title="Error",
+        description=f"```Link does not begin with https:// ```",
+        color=discord.Color.from_rgb(255, 182, 193),
+        )
+    elif link[31:42].isdigit() == False:
+        embed = discord.Embed(
+        title="Error",
+        description=f"```Item ID is not 11 digits! Add the ID instead through !add or !watch_legacy```",
+        color=discord.Color.from_rgb(255, 182, 193),
+        ) 
+    elif (int(link[31:42]) in settings["MISC"]["WATCHER"]["ITEMS"]):
+        embed = discord.Embed(
+        title="Error",
+        description=f"```Item ID is already being watched!```",
+        color=discord.Color.from_rgb(255, 182, 193),
+        ) 
+    elif link[0:8] == "https://" and link[31:42].isdigit() == True:
+
+        print("Adding legacy id")
+
+        with open("settings.json", "r") as f:
+            settings = json.load(f)
+
+        settings["MISC"]["WATCHER"]["ITEMS"].append(int(link[31:42]))
+
+        with open("settings.json", "w") as f:
+            json.dump(settings, f, indent=4)
+
+        restart_main_py()   
+        embed = discord.Embed(
+        title=f"Item ID {link[31:42]} has been added.",
+        color=discord.Color.from_rgb(255, 182, 193),
+        )
+
+    await ctx.send(embed=embed)
+
 
 # legacy watcher on
 @bot.command()
