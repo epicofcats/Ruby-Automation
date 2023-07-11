@@ -632,6 +632,32 @@ async def fast_snipe(ctx):
     else:
         print("Error while trying to restart mewt after updating the buy debounce & speed.")
 
+# fast snipe command
+@bot.command(name="normal_snipe")
+@is_owner()
+async def normal_snipe(ctx):
+
+    with open("settings.json", "r") as f:
+        settings = json.load(f)
+
+
+    settings["MISC"]["BUY_DEBOUNCE"] = 2
+    settings['MISC']['WATCHER']['SCAN_SPEED'] = 0.9
+
+    with open("settings.json", "w") as f:
+        json.dump(settings, f, indent=4)
+
+    embed = Embed(
+        title="Success!",
+        description=f"```New buy debounce: 2\nNew speed: 0.9```",
+        color=Colour.from_rgb(255, 182, 193),
+    )
+    await ctx.send(embed=embed)
+
+    if await restart_main_py():
+        print("Succesfully restarted mewt after updating the buy debounce & speed.")
+    else:
+        print("Error while trying to restart mewt after updating the buy debounce & speed.")
 
 # buy debounce command
 @bot.command(name="buy_debounce")
