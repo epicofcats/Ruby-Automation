@@ -8,7 +8,7 @@ try:
     from discord import Embed, Colour
     from discord import Game
     from robloxapi import Client
-    import httpx 
+    import httpx e
     import asyncio 
     import os 
     import time 
