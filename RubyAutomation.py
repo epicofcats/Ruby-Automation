@@ -6,7 +6,7 @@ try:
     import json 
     import aiohttp 
     from discord import Embed, Colour
-    rom discord import Game
+    from discord import Game
     from robloxapi import Client
     import httpx 
     import asyncio 
@@ -36,7 +36,7 @@ except ModuleNotFoundError:
         ask = input("Installation finished.")
         exit()
 
-scriptVersion = 1
+scriptVersion = 2
 def whichPythonCommand():
     LocalMachineOS = platform.system()
     if (
@@ -692,7 +692,7 @@ async def info(ctx):
     )
     embed.add_field(
         name=f"Mewt Sniper (2nd Part):",
-        value=f"```{prefix}autosearch on --Enable autosearch\n{prefix}autosearch off --Disable autosearch\n{prefix}viewWatching --View all data of the items inside your watchlist.\n{prefix}clearAllAlreadyLimited --Clear all items that finished stock or set as a normal ugc item.\n{prefix}addwl --Add a whitelisted creator\n{prefix}removewl  --Remove a whitelisted creator\n{prefix}whitelist --View the whitelisted creators\n{prefix}paid_on --Set the paid autosearch on\n{prefix}paid_off --Set the autosearch paid off\n{prefix}maxstock --Set the max stock for the paid autosearch\n{prefix}maxprice --Set the max price for the paid autosearch\n{prefix}fast_snipe -- set your buy debounce and scan speed to 0.2 then restarts (aka silver method) ```",
+        value=f"```{prefix}autosearch on --Enable autosearch\n{prefix}autosearch off --Disable autosearch\n{prefix}viewWatching --View all data of the items inside your watchlist.\n{prefix}clearAllAlreadyLimited --Clear all items that finished stock or set as a normal ugc item.\n{prefix}addwl --Add a whitelisted creator\n{prefix}removewl  --Remove a whitelisted creator\n{prefix}whitelist --View the whitelisted creators\n{prefix}paid_on --Set the paid autosearch on\n{prefix}paid_off --Set the autosearch paid off\n{prefix}maxstock --Set the max stock for the paid autosearch\n{prefix}maxprice --Set the max price for the paid autosearch ```",
         inline=False,
     )
     embed.add_field(
