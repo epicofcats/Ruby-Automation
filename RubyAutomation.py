@@ -697,7 +697,7 @@ async def info(ctx):
     )
     embed.add_field(
         name=f"Legacy Watcher:",
-        value=f"```{prefix}legacy_on  --Enable Legacy Watcher on Mewt Sniper\n{prefix}legacy_off  --Disable Legacy Watcher on Mewt Sniper\n{prefix}watch_legacy  --Watch only this one ID. IDS CANNOT BE REVERTED AFTER COMMAND RAN\n{prefix}add_legacy  --Add an ID to your legacy watcher \n{prefix}remove_legacy  --Remove an ID from your legacy watcher\n{prefix}link_legacy  --Watch only this one ID from a link. [ID MUST BE 11 DIGITS AND LINK BEGINS WITH https://, IDS CANNOT BE REVERTED AFTER COMMAND RAN]  ```",
+        value=f"```{prefix}legacy_on  --Enable Legacy Watcher on Mewt Sniper\n{prefix}legacy_off  --Disable Legacy Watcher on Mewt Sniper\n{prefix}watch_legacy  --Watch only this one ID. IDS CANNOT BE REVERTED AFTER COMMAND RAN\n{prefix}add_legacy  --Add an ID to your legacy watcher \n{prefix}link_legacy  --Watch only this one ID from a link. [ID MUST BE 11 DIGITS AND LINK BEGINS WITH https://, IDS CANNOT BE REVERTED AFTER COMMAND RAN]  ```",
         inline=False,
     )
     embed.add_field(name=f"Utilitys", value=f"```{prefix}more  --Look at some general information\n{prefix}ping  --Check the bot response time\n{prefix}screenshot --Screenshot your mewt```", inline=False)   
@@ -1361,38 +1361,6 @@ async def add_legacy(ctx, id: int):
     )
 
     await ctx.send(embed=embed)
-
-# legacy watcher remove
-@bot.command()
-@is_owner()
-async def remove_legacy(ctx, id: int):
-    print("Adding legacy id")
-    with open("settings.json", "r") as f:
-        settings = json.load(f)
-
-    if len(settings["MISC"]["WATCHER"]["ITEMS"]) - 1 <= 0:
-        embed = discord.Embed(
-            title="LEGACY_WATCHER Error",
-            description=f"```No items were removed since if this item ID is removed, mewt will have nothing to watch.```",
-            color=discord.Color.from_rgb(255, 182, 193),
-        )
-
-        await ctx.send(embed=embed)
-    else:
-        settings["MISC"]["WATCHER"]["ITEMS"].pop(id)
-        settings["MISC"]["WATCHER"]["USE_LEGACY_WATCHER"] = True
-
-        with open("settings.json", "w") as f:
-            json.dump(settings, f, indent=4)
-
-        restart_main_py()
-        embed = discord.Embed(
-            title="LEGACY_WATCHER Update",
-            description=f"```Item has been removed from list. If legacy watcher was off, it has been enabled automatically.```",
-            color=discord.Color.from_rgb(255, 182, 193),
-        )
-
-        await ctx.send(embed=embed)
 
 #add link
 @bot.command()
