@@ -6,7 +6,7 @@ try:
     import json 
     import aiohttp 
     from discord import Embed, Colour
-    from discord import Game
+  d  from discord import Game
     from robloxapi import Client
     import httpx 
     import asyncio 
