@@ -3,7 +3,7 @@ import pip
 try:
     import discord
     from discord.ext import commands
-    import json 
+    import json e
     import aiohttp 
     from discord import Embed, Colour
     from discord import Game
