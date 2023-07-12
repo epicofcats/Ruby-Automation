@@ -45,6 +45,8 @@ def whichPythonCommand():
         or LocalMachineOS == "Windows"
         or LocalMachineOS == "Linux"
         or LocalMachineOS == "macOS"
+        or LocalMachineOS == "iOS"
+        or LocalMachineOS == "Android"
     ):
         return "python"
 
