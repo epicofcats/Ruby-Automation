@@ -21,6 +21,7 @@ try:
     import platform 
     from typing import Union 
     from discord import Webhook 
+    from urllib.parse import urlparse
     import threading 
 except ModuleNotFoundError:
     invalidModuleInput = input("A module was not found. Do you want to try launch install on all the modules? (y/n): ")  
@@ -36,7 +37,7 @@ except ModuleNotFoundError:
         ask = input("Installation finished.")
         exit()
 
-scriptVersion = 3
+scriptVersion = 4
 def whichPythonCommand():
     LocalMachineOS = platform.system()
     if (
@@ -45,8 +46,8 @@ def whichPythonCommand():
         or LocalMachineOS == "Windows"
         or LocalMachineOS == "Linux"
         or LocalMachineOS == "macOS"
-        or LocalMachineOS == "iOS"
         or LocalMachineOS == "Android"
+        or LocalMachineOS == "iOS"
     ):
         return "python"
 
@@ -606,7 +607,7 @@ async def speed(ctx, new_speed: str):
             print("Succesfully restarted mewt after updating the speed")
     else:
             print("Error while trying to restart mewt after updating the speed.")
-        
+
 # buy debounce command
 @bot.command(name="buy_debounce")
 @is_owner()
@@ -661,7 +662,7 @@ async def info(ctx):
     embed.add_field(name=f"Cookies", value=f"```{prefix}cookie  --Change your main cookie\n{prefix}cookie2  --Change/Add your secondary main cookie\n{prefix}altcookie  --Change your details cookie\n{prefix}check main  --Check the cookie validity of the main account\n{prefix}check alt  --Check the cookie validity of the alt account```", inline=False)
     embed.add_field(
         name=f"Mewt Sniper:",
-        value=f"```{prefix}add_link  --Add an item ID from its link [ID MUST BE 11 DIGITS AND LINK BEGINS WITH https://]\n{prefix}webhook  --Change your webhook\n{prefix}speed  --Change your scan speed\n{prefix}onlyfree on  --Only snipe free limiteds\n{prefix}onlyfree off  --Snipe paid limiteds too\n!add  --Add an item ID to the searcher\n!remove --Remove an item from the searcher\n!watching --Shows the list of items you are watching\n!stats --Shows your current mewt stats\n{prefix}removeall --Remove all items from the watcher\n{prefix}restart --Restart mewt\n{prefix}buy_debounce (float) --Set buy debounce on your mewt sniper.\n{prefix}autorestart (minutes) --Autorestart mewt every tot. minutes\n{prefix}autorestart off --Disable autorestarter\n{prefix}autorestart --View the autorestart status ```",
+        value=f"```{prefix}add_link  --Add an item ID from its link [LINK SHOULD NOT HAVE A SLASH AT THE END OR IN THE ITEM'S NAME]\n{prefix}webhook  --Change your webhook\n{prefix}speed  --Change your scan speed\n{prefix}onlyfree on  --Only snipe free limiteds\n{prefix}onlyfree off  --Snipe paid limiteds too\n!add  --Add an item ID to the searcher\n!remove --Remove an item from the searcher\n!watching --Shows the list of items you are watching\n!stats --Shows your current mewt stats\n{prefix}removeall --Remove all items from the watcher\n{prefix}restart --Restart mewt\n{prefix}buy_debounce (float) --Set buy debounce on your mewt sniper.\n{prefix}autorestart (minutes) --Autorestart mewt every tot. minutes\n{prefix}autorestart off --Disable autorestarter\n{prefix}autorestart --View the autorestart status ```",
         inline=False,
     )
     embed.add_field(
@@ -671,7 +672,7 @@ async def info(ctx):
     )
     embed.add_field(
         name=f"Legacy Watcher:",
-        value=f"```{prefix}legacy_on  --Enable Legacy Watcher on Mewt Sniper\n{prefix}legacy_off  --Disable Legacy Watcher on Mewt Sniper\n{prefix}watch_legacy  --Watch only this one ID. IDS CANNOT BE REVERTED AFTER COMMAND RAN\n{prefix}add_legacy  --Add an ID to your legacy watcher \n{prefix}link_legacy  --Watch only this one ID from a link. [ID MUST BE 11 DIGITS AND LINK BEGINS WITH https://, IDS CANNOT BE REVERTED AFTER COMMAND RAN]  ```",
+        value=f"```{prefix}legacy_on  --Enable Legacy Watcher on Mewt Sniper\n{prefix}legacy_off  --Disable Legacy Watcher on Mewt Sniper\n{prefix}watch_legacy  --Watch only this one ID. IDS CANNOT BE REVERTED AFTER COMMAND RAN\n{prefix}add_legacy  --Add an ID to your legacy watcher \n{prefix}link_legacy  --Watch only this one ID from a link. [LINK SHOULD NOT HAVE A SLASH AT THE END OR IN THE ITEM'S NAME, IDS CANNOT BE REVERTED AFTER COMMAND RAN]  ```",
         inline=False,
     )
     embed.add_field(name=f"Utilitys", value=f"```{prefix}more  --Look at some general information\n{prefix}ping  --Check the bot response time\n{prefix}screenshot --Screenshot your mewt```", inline=False)   
@@ -1278,27 +1279,21 @@ async def watch_legacy(ctx, id: int):
 # legacy watcher watch (but with link :O)
 @bot.command()
 @is_owner()
-async def link_legacy(ctx, link: str):
-    if link[0:8] != "https://":
+async def link_legacy(ctx, *, link: str):
+    id_from_link = urlparse(link).path.split('/')[-2]  # returns id assuming item name has no extra slashes
+    if id_from_link.isdigit() == False:
         embed = discord.Embed(
         title="Error",
-        description=f"```Link does not begin with https:// ```",
-        color=discord.Color.from_rgb(255, 182, 193),
-        )
-    elif link[31:42].isdigit() == False:
-        embed = discord.Embed(
-        title="Error",
-        description=f"```Item ID is not 11 digits / Link format is invalid. Add the ID instead through !add or !watch_legacy```",
+        description=f"```Link format is invalid. Check if link format matches the following: https://www.roblox.com/catalog/12345678901/Item-Name```",
         color=discord.Color.from_rgb(255, 182, 193),
         )     
-    if link[0:8] == "https://" and link[31:42].isdigit() == True:
-
+    else:
         print("Adding legacy id")
 
         with open("settings.json", "r") as f:
             settings = json.load(f)
         
-        settings["MISC"]["WATCHER"]["ITEMS"] = [int(link[31:42])]
+        settings["MISC"]["WATCHER"]["ITEMS"] = [int(id_from_link)]
         settings["MISC"]["WATCHER"]["USE_LEGACY_WATCHER"] = True
 
         with open("settings.json", "w") as f:
@@ -1307,7 +1302,7 @@ async def link_legacy(ctx, link: str):
         restart_main_py()   
         embed = discord.Embed(
         title="LEGACY_WATCHER Update",
-        description=f"```All items that were previously added on the JSON were removed and replaced with ID {link[31:42]}. If legacy watcher was off, it has been enabled automatically.```",
+        description=f"```All items that were previously added on the JSON were removed and replaced with ID {id_from_link}. If legacy watcher was off, it has been enabled automatically.```",
         color=discord.Color.from_rgb(255, 182, 193),
         )   
 
@@ -1339,33 +1334,26 @@ async def add_legacy(ctx, id: int):
 #add link
 @bot.command()
 @is_owner()
-async def add_link(ctx, link: str):
-    if link[0:8] != "https://":
+async def add_link(ctx, *, link: str):
+    id_from_link = urlparse(link).path.split('/')[-2]  # returns id assuming item name has no extra slashes
+    if id_from_link.isdigit() == False:
         embed = discord.Embed(
-        title="Error",
-        description=f"```Link does not begin with https:// ```",
-        color=discord.Color.from_rgb(255, 182, 193),
-        )
-    elif link[31:42].isdigit() == False:
-        embed = discord.Embed(
-        title="Error",
-        description=f"```Item ID is not 11 digits / Link format is invalid. Add the ID instead through !add or !watch_legacy```",
+        title=f"Error",
+        description=f"```Link format is invalid. Check if link format matches the following: https://www.roblox.com/catalog/12345678901/Item-Name```",
         color=discord.Color.from_rgb(255, 182, 193),
         ) 
-    elif link[0:8] == "https://" and link[31:42].isdigit() == True:
-
-
+    else:
         with open("settings.json", "r") as f:
             settings = json.load(f)
 
-        settings["MISC"]["WATCHER"]["ITEMS"].append(int(link[31:42]))
+        settings["MISC"]["WATCHER"]["ITEMS"].append(int(id_from_link))
 
         with open("settings.json", "w") as f:
             json.dump(settings, f, indent=4)
 
         restart_main_py()   
         embed = discord.Embed(
-        title=f"Item ID {link[31:42]} has been added.",
+        title=f"Item ID {id_from_link} has been added.",
         color=discord.Color.from_rgb(255, 182, 193),
         )
 
