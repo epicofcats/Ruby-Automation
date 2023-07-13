@@ -44,10 +44,10 @@ def whichPythonCommand():
         LocalMachineOS == "win32"
         or LocalMachineOS == "win64"
         or LocalMachineOS == "Windows"
-        or LocalMachineOS == "Linux"
-        or LocalMachineOS == "macOS"
+        # or LocalMachineOS == "Linux" # temporarily removed, cba to fix
+        # or LocalMachineOS == "macOS" # temporarily removed, cba to fix
         or LocalMachineOS == "Android"
-        or LocalMachineOS == "iOS"
+        # or LocalMachineOS == "iOS" # temporarily removed, cba to fix
     ):
         return "python"
 
